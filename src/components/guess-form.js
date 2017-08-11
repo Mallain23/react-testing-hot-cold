@@ -1,21 +1,27 @@
 import React from 'react';
+import {connect} from 'react-redux';
+
+import { makeGuess } from '../actions';
 
 import './guess-form.css';
 
-export default class GuessForm extends React.Component {
+export class GuessForm extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.onGuess = this.onGuess.bind(this)
+    }
     onGuess(event) {
         event.preventDefault();
 
-        if (this.props.onGuess) {
             const value = this.input.value;
-            this.props.onGuess(value);
-        }
-        this.input.value = '';
+            this.props.dispatch(makeGuess(value));
+            this.input.value = '';
     }
 
     render() {
         return (
-            <form onSubmit={e => this.onGuess(e)}>
+            <form onSubmit={this.onGuess}>
                 <label htmlFor="userGuess">Enter your Guess</label>
                 <input type="text" name="userGuess" id="userGuess"
                     className="text" maxLength="3" autoComplete="off"
@@ -27,3 +33,4 @@ export default class GuessForm extends React.Component {
     }
 };
 
+export default connect()(GuessForm)
